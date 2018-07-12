@@ -32,8 +32,8 @@
   </script>
   <!-- End Default Tracking Script -->
   <!-- Configuration Script -->
-  <SCRIPT TYPE='text/javascript' LANGUAGE='JavaScript'>
-
+  <script type='text/javascript'>
+  console.log('Enter Datalookup Code');
   function CreateRow(label, value) {
       var p = document.createElement('p');
       var b = document.createElement('b');
@@ -45,38 +45,31 @@
 
   function SetElqContent(){ 
       if (this.GetElqContentPersonalizationValue){
+        console.log('Data lookup Found');
         CreateRow(': ', GetElqContentPersonalizationValue('C_EmailAddress'));
         CreateRow(': ', GetElqContentPersonalizationValue('C_FirstName'));
         CreateRow(': ', GetElqContentPersonalizationValue('C_LastName'));
         CreateRow(': ', GetElqContentPersonalizationValue('C_State_Prov'));
         CreateRow(': ', GetElqContentPersonalizationValue('C_Zip_Postal'));
     } else {
+        console.log('Data lookup Not Found');
         CreateRow('Personalization functions not found','');
      }
   }
 
   /* Integration Scripts */
-  _elqQ.push(['elqDataLookup', escape('df645c35-5f21-4bda-9085-fc51b9369e0c'),'<C_EmailAddress>brian@salytics.com</C_EmailAddress>']);
-  </SCRIPT>
+  _elqQ.push(['elqDataLookup', escape('df645c355f214bda9085fc51b9369e0c'),'<C_EmailAddress>brian@salytics.com</C_EmailAddress>']);
+
+  </script>
 
   </head>
   <body>
   <!-- Title -->
   <h1>Eloqua Test Page: Data Lookups</h1>
-
-  <!-- Body Contents -->
-  <div>
-    <p>First Name: <span></span></p><br>
-    <p>Last Name: <span></span></p><br>
-    <p>Email: <span></span></p><br>
-    <p>State: <span></span></p><br>
-    <p>Zip Code: <span></span></p>
+  <!-- Div to populate -->
+ <div id="contactinfo">
+      
   </div>
 
-  <div id="contactinfo">
-    
-  </div>
-
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
   </body>
 </html>
