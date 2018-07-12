@@ -79,27 +79,6 @@
     
   </div>
 
-  <script type='text/javascript'><!--//
-  var timerId = null, timeout = 5;
-  //--></script>
-  <script type='text/javascript'><!--//
-  function WaitUntilCustomerGUIDIsRetrieved() {
-  if (!!(timerId)) {
-      if (timeout == 0) {
-  return;
-  }
-  if (typeof this.GetElqCustomerGUID === 'function') {
-          document.forms["BasicForm"].elements["elqCustomerGUID"].value = GetElqCustomerGUID();
-  return;
-  }
-  timeout -= 1;
-  }
-  timerId = setTimeout("WaitUntilCustomerGUIDIsRetrieved()", 500);
-  return;
-  }
-  window.onload = WaitUntilCustomerGUIDIsRetrieved;
-  _elqQ.push(['elqGetCustomerGUID']);
-  //--></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
   </body>
 </html>
