@@ -10,12 +10,17 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Eloqua Datalookup Test</title>
   <meta name="author" content="name">
+  
   <!-- PART 1 : VARIABLES -->
   <script type="text/javascript">
     // Make Changes
     let EloquaSiteId = '2126376800';
     let primaryUniqueField = 'C_EmailAddress';
-    let emailAddress = 'brian@salytics.com';
+    const getEmailFromURL = (key) => {
+      let urlParams = new URLSeachParams(window.location.search);
+      return decodeURIComponent(urlParams.get(key));
+    }
+    let emailAddress = getEmailFromURL('email');
     let contactLookupKey = 'df645c355f214bda9085fc51b9369e0c';
     let emailGroupLookupKey = '49570d20c1c64fd19d849155906e4c41';
     let visitoryLookupKey = '413a9d53f2f3459b8f03aad685648a16';
@@ -66,14 +71,19 @@
     <!-- PART 3 : UPDATE FORM -->
     <script type="text/javascript">
 
-      // Update DOM with data from web data lookup
-      function loadCategories(formId){
+      // Update DOM with contact information from data lookup
+      function loadContactCategories(){
+        console.log('Enter Contact Categories'):
         console.log('First Name: '+ GetElqContentPersonalizationValue('C_FirstName'));
         console.log('Last Name: '+ GetElqContentPersonalizationValue('C_LastName'));
         console.log('Email: '+ GetElqContentPersonalizationValue('C_EmailAddress'));
         console.log('Province: '+ GetElqContentPersonalizationValue('C_State_Prov'));
         console.log('Zipcode: '+ GetElqContentPersonalizationValue('C_Zip_Postal'));
+      }
 
+      // Update DOM with visitor information from data lookup
+      function loadVisitorCategories(){
+        console.log('Enter Visitor Categories'):
         console.log('First Name: '+ GetElqContentPersonalizationValue('V_ElqFirstName'));
         console.log('Last Name: '+ GetElqContentPersonalizationValue('V_ElqLastName'));
         console.log('Email: '+ GetElqContentPersonalizationValue('V_ElqEmailAddress'));
@@ -82,6 +92,7 @@
       }
 
       function loadSubscriptions(){
+        console.log('Enter Subscription');
         // Make Changes: Email Group and 'Subscription DataLookup Id'
         var marketingGUID = '{853dfa57-87ef-4fdb-a6d9-38152b032ac9}';
         var salesGUID = '{e1250a1e-2ee1-4c3b-963d-c7df6b047176}';
@@ -97,33 +108,53 @@
 
   <!-- PART 4 : ELOQUA WEB DATA LOOKUPS -->
   <script type="text/javascript">
+    let firstLookup = true;
+    let secondLookup = false;
+    let thirdLookup = false;
+    let getSubscriptionInfo = false;
 
-   var GEPC = (function () {
-     // Variables
-     let email;
-     let contactData;
+    // Call back function automatically called after data lookup
+    function SetElqContent(){
+      console.log('Enter SetElqContent');
+      if(firstLookup){
+        // If function is available assume that datalookup was successful
+        if(this.GetElqContentPersonalizationValue){
+          // Call Email Group Data Lookup
+          firstLookup = false;
+          secondLookup = true;
+          getSubscriptionInfo = true;
+          elqQ.push(['elqDataLookup', escape(emailGroupLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'</'+primaryUniqueField+'>']);  
+        }
+        else{
+          // Call Visitor Data Lookup
+          firstLookup = false;
+          secondLookup = true;
+          _elqQ.push(['elqDataLookup', escape(visitoryLookupKey),'']);
+        }
+      }
+      else if(!firstLookup && secondLookup){
+        console.log('Enter Second Lookup');
+        // If function is available assume that datalookup was successful
+        if(this.GetElqContentPersonalizationValue){
+          getSubscriptionInfo = true;
+          console.log(GetElqContentPersonalizationValue('V_ElqEmailAddress'));
+          //elqQ.push(['elqDataLookup', escape(emailGroupLookupKey),'<'+primaryUniqueField+'>'+GetElqContentPersonalizationValue('V_ElqEmailAddress')+'</'+primaryUniqueField+'>']); 
+        }
+        else{
+          console.log('Cannot find the contact');
+        }
 
-     return {
-       contactDL : function(){
-
-          function SetElqContent(){
-           console.log('works');
-           if(this.GetElqContentPersonalizationValue)
-             contactData = this.GetElqContentPersonalizationValue;
-          }
-
-          _elqQ.push(['elqDataLookup', escape(contactLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'</'+primaryUniqueField+'>']);
-          return;
-       }
-     }
-   })();
-
-   GEPC.contactDL();
+      }
 
 
+      if(getSubscriptionInfo){
+        loadSubscriptions();
+      }
+      console.log('Exit SetElqContent');
+    }
 
     // Fire Data Lookup A, Contact Data lookup
-    //_elqQ.push(['elqDataLookup', escape(contactLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'</'+primaryUniqueField+'>']);
+    _elqQ.push(['elqDataLookup', escape(contactLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'</'+primaryUniqueField+'>']);
 
     // Fire Data Lookup C, Email Group Data Lookup
     //_elqQ.push(['elqDataLookup', escape(emailGroupLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'</'+primaryUniqueField+'>']);    
