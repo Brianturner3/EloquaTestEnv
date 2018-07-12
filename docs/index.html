@@ -83,13 +83,16 @@
       }
 
       function loadSubscriptions(){
+        // Make Changes: Email Group and 'Subscription DataLookup Id'
         var marketingGUID = '{853dfa57-87ef-4fdb-a6d9-38152b032ac9}';
         var salesGUID = '{e1250a1e-2ee1-4c3b-963d-c7df6b047176}';
+        // End Changes
 
         console.log('Group Membership ' + GetElqGroupMembershipStatus(marketingGUID));
         console.log('Group Membership ' + GetElqGroupMembershipStatus(salesGUID));
-        (GetElqGroupMembershipStatus(marketingGUID)) ? document.getElementById('marketingPref').checked = true; : document.getElementById('marketingPref').checked = false;
-        (GetElqGroupMembershipStatus(marketingGUID)) ? document.getElementById('salesPref').checked = true; : document.getElementById('salesPref').checked = false;
+        // Set Subscription Checkboxes. Make changes here depending on the ID of the checkboxes
+        (GetElqGroupMembershipStatus(marketingGUID)) ? document.getElementById('marketingPref').checked = true : document.getElementById('marketingPref').checked = false;
+        (GetElqGroupMembershipStatus(marketingGUID)) ? document.getElementById('salesPref').checked = true : document.getElementById('salesPref').checked = false;
       }
     </script>
 
@@ -115,7 +118,7 @@
       // Check for existence of elq function implying that Datalookup has succeeded (email group)
       if (this.GetElqGroupMembershipStatus && !hasLoadedSubscriptions){
           console.log('Load Subscriptions');
-          loadSubscriptions()
+          loadSubscriptions();
           hasLoadedSubscriptions = true;
       }
       else {
@@ -124,7 +127,7 @@
    }
 
     // Fire Data Lookup A, Contact Data lookup
-    _elqQ.push(['elqDataLookup', escape(contactLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'<'+primaryUniqueField+'>']);
+    _elqQ.push(['elqDataLookup', escape(contactLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'</'+primaryUniqueField+'>']);
 
     // Fire Data Lookup C, Email Group Data Lookup
     _elqQ.push(['elqDataLookup', escape(emailGroupLookupKey),primaryUniqueField+emailAddress+primaryUniqueField]);    
