@@ -13,7 +13,6 @@
   <meta name="description" content="description here">
   <meta name="keywords" content="keywords,here">
 
-  <!-- Start data lookup -->
   <!-- Default Tracking Script -->
   <script type="text/javascript">
       var _elqQ = _elqQ || [];
@@ -40,10 +39,12 @@
       p.appendChild(b);
       b.appendChild(document.createTextNode(label));
       p.appendChild(document.createTextNode(value));
+
       document.getElementById('contactinfo').appendChild(p);
   }
 
-  function SetElqContent(){ 
+  function SetElqContent(){
+      console.log('Enter SetElqContent');
       if (this.GetElqContentPersonalizationValue){
         console.log('Data lookup Found');
         CreateRow(': ', GetElqContentPersonalizationValue('C_EmailAddress'));
@@ -67,8 +68,7 @@
   <!-- Title -->
   <h1>Eloqua Test Page: Data Lookups</h1>
   <!-- Div to populate -->
- <div id="contactinfo">
-      
+  <div id="contactinfo">
   </div>
 
   </body>
