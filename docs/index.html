@@ -59,8 +59,8 @@
       State: <input type="text" name="state"><br>
       Zipcode: <input type="text" name="zipcode"><br><br>
       <h5>Email Preferences:</h5><br>
-      Marketing Emails: <input type="radio" name="marketingPref"><br>
-      Sales Emails: <input type="radio" name="salesPref"><br>
+      Marketing Emails: <input type="radio" name="marketingPref" id="marketingPref"><br>
+      Sales Emails: <input type="radio" name="salesPref" id="salesPref"><br>
       <input type="submit" value="Submit">
     </form>
 
@@ -88,6 +88,8 @@
 
         console.log('Group Membership ' + GetElqGroupMembershipStatus(marketingGUID));
         console.log('Group Membership ' + GetElqGroupMembershipStatus(salesGUID));
+        (GetElqGroupMembershipStatus(marketingGUID)) ? document.getElementById('marketingPref').checked = true; : document.getElementById('marketingPref').checked = false;
+        (GetElqGroupMembershipStatus(marketingGUID)) ? document.getElementById('salesPref').checked = true; : document.getElementById('salesPref').checked = false;
       }
     </script>
 
@@ -96,6 +98,9 @@
 
    function SetElqContent(){
       console.log('Enter SetElqContent');
+      let hasLoadedSubscriptions = false;
+      let firstLookup = true;
+
       // Check for existence of elq function implying that Datalookup has succeeded (contact)
       if (this.GetElqContentPersonalizationValue){
           console.log('Load Categories');
@@ -108,17 +113,18 @@
       }
 
       // Check for existence of elq function implying that Datalookup has succeeded (email group)
-      if (this.GetElqGroupMembershipStatus){
+      if (this.GetElqGroupMembershipStatus && !hasLoadedSubscriptions){
           console.log('Load Subscriptions');
           loadSubscriptions()
+          hasLoadedSubscriptions = true;
       }
       else {
-
+          console.log('Subscription Already Loaded');
       }
    }
 
     // Fire Data Lookup A, Contact Data lookup
-    _elqQ.push(['elqDataLookup', escape(contactLookupKey),primaryUniqueField+emailAddress+primaryUniqueField]);
+    _elqQ.push(['elqDataLookup', escape(contactLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'<'+primaryUniqueField+'>']);
 
     // Fire Data Lookup C, Email Group Data Lookup
     _elqQ.push(['elqDataLookup', escape(emailGroupLookupKey),primaryUniqueField+emailAddress+primaryUniqueField]);    
