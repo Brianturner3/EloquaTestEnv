@@ -10,7 +10,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Eloqua Datalookup Test</title>
   <meta name="author" content="name">
-  
   <!-- PART 1 : VARIABLES -->
   <script type="text/javascript">
     // Make Changes
@@ -59,8 +58,8 @@
       State: <input type="text" name="state"><br>
       Zipcode: <input type="text" name="zipcode"><br><br>
       <h5>Email Preferences:</h5><br>
-      Marketing Emails: <input type="radio" name="marketingPref" id="marketingPref"><br>
-      Sales Emails: <input type="radio" name="salesPref" id="salesPref"><br>
+      Marketing Emails: <input type="checkbox" name="marketingPref" id="marketingPref"><br>
+      Sales Emails: <input type="checkbox" name="salesPref" id="salesPref"><br>
       <input type="submit" value="Submit">
     </form>
 
@@ -99,37 +98,35 @@
   <!-- PART 4 : ELOQUA WEB DATA LOOKUPS -->
   <script type="text/javascript">
 
-   function SetElqContent(){
-      console.log('Enter SetElqContent');
-      let hasLoadedSubscriptions = false;
+   var GEPC = (function () {
+     // Variables
+     let email;
+     let contactData;
 
-      // Check for existence of elq function implying that Datalookup has succeeded (contact)
-      if (this.GetElqContentPersonalizationValue){
-          console.log('Load Categories');
-          loadCategories(EloquaFormID);
-      }
-      else {
-          //GetElqContentPersonlizationValue does not exist, perform Data Lookup B, Visitor Lookup
-          console.log('Perform Visitor Datalookup');
-          _elqQ.push(['elqDataLookup', escape(visitoryLookupKey),'']);
-      }
+     return {
+       contactDL : function(){
 
-      // Check for existence of elq function implying that Datalookup has succeeded (email group)
-      if (this.GetElqGroupMembershipStatus && !hasLoadedSubscriptions){
-          console.log('Load Subscriptions');
-          loadSubscriptions();
-          hasLoadedSubscriptions = true;
-      }
-      else {
-          console.log('Subscription Already Loaded');
-      }
-   }
+          function SetElqContent(){
+           console.log('works');
+           if(this.GetElqContentPersonalizationValue)
+             contactData = this.GetElqContentPersonalizationValue;
+          }
+
+          _elqQ.push(['elqDataLookup', escape(contactLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'</'+primaryUniqueField+'>']);
+          return;
+       }
+     }
+   })();
+
+   GEPC.contactDL();
+
+
 
     // Fire Data Lookup A, Contact Data lookup
-    _elqQ.push(['elqDataLookup', escape(contactLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'</'+primaryUniqueField+'>']);
+    //_elqQ.push(['elqDataLookup', escape(contactLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'</'+primaryUniqueField+'>']);
 
     // Fire Data Lookup C, Email Group Data Lookup
-    _elqQ.push(['elqDataLookup', escape(emailGroupLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'</'+primaryUniqueField+'>']);    
+    //_elqQ.push(['elqDataLookup', escape(emailGroupLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'</'+primaryUniqueField+'>']);    
 
   </script>
 
