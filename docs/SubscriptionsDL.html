@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Simple example of page using data lookups to retrieve visitor data info-->
+<!-- Simple example of page using data lookups to retrieve Email group subscription-->
 <!--[if lte IE 6]><html class="preIE7 preIE8 preIE9"><![endif]-->
 <!--[if IE 7]><html class="preIE8 preIE9"><![endif]-->
 <!--[if IE 8]><html class="preIE9"><![endif]-->
@@ -17,8 +17,7 @@
     var EloquaSiteId = '2126376800';
     var primaryUniqueField = 'C_EmailAddress';
     var emailAddress = 'brian@salytics.com';
-    var dataLookupKey = '413a9d53f2f3459b8f03aad685648a16'
-    var visitoryLookupKey = '413a9d53f2f3459b8f03aad685648a16';
+    var dataLookupKey = '49570d20c1c64fd19d849155906e4c41'
     // End Changes
   </script>
 
@@ -65,23 +64,16 @@
 
       // Update DOM with data from web data lookup
       function loadCategories(){
-        console.log('First Name: '+ GetElqContentPersonalizationValue('V_ElqFirstName'));
-        console.log('First Name: '+ GetElqContentPersonalizationValue('V_ElqLastName'));
-        console.log('First Name: '+ GetElqContentPersonalizationValue('V_ElqEmailAddress'));
-        console.log('First Name: '+ GetElqContentPersonalizationValue('V_ProvinceFromIP'));
-        console.log('First Name: '+ GetElqContentPersonalizationValue('V_ZipCodeFromIP'));
+
       }
 
       function loadSubscriptions(){
         var marketingGUID = '{853dfa57-87ef-4fdb-a6d9-38152b032ac9}';
         var salesGUID = '{e1250a1e-2ee1-4c3b-963d-c7df6b047176}';
 
-        console.log('First Name: '+ GetElqContentPersonalizationValue('V_ElqFirstName'));
-        console.log('First Name: '+ GetElqContentPersonalizationValue('V_ElqLastName'));
-        console.log('First Name: '+ GetElqContentPersonalizationValue('V_ElqEmailAddress'));
-        console.log('First Name: '+ GetElqContentPersonalizationValue('V_ProvinceFromIP'));
-        console.log('First Name: '+ GetElqContentPersonalizationValue('V_ZipCodeFromIP'));
-      
+        console.log('Group Membership ' + GetElqGroupMembershipStatus(marketingGUID));
+        console.log('Group Membership ' + GetElqGroupMembershipStatus(salesGUID));
+        document.getElementById("EG_Marketing").checked = true;
       }
     </script>
 
@@ -104,19 +96,19 @@
         //replace the following GUID with the unique code of the group you are interested in testing
         var marketingGUID = '{853dfa57-87ef-4fdb-a6d9-38152b032ac9}';
         var salesGUID = '{e1250a1e-2ee1-4c3b-963d-c7df6b047176}';
-        if (this.GetElqContentPersonalizationValue){
+        if (this.GetElqGroupMembershipStatus){
             /*if(GetElqGroupMembershipStatus(marketingGUID)){
                 document.write('<p><b>' + 'You are a member of this group' + '</b>');
             }else{
                 document.write('<p><b>' + 'You are not a member of this group' + '</b>');
             }*/
-            loadCategories();
+            loadSubscriptions();
         } else {
             document.write('<p><b>' + 'Group membership functions not found' + '</b><p>');
         }
     } 
 
-    _elqQ.push(['elqDataLookup', escape(visitoryLookupKey),'']);
+    _elqQ.push(['elqDataLookup', escape(dataLookupKey),'<C_EmailAddress>'+emailAddress+'</C_EmailAddress>']);
   </script>
   </body>
 </html>
