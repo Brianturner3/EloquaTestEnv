@@ -61,9 +61,19 @@
 
     <!-- PART 3 : UPDATE DOM -->
     <script>
+
       // Update DOM with data from web data lookup
       function loadCategories(){
 
+      }
+
+      function loadSubscriptions(){
+        var marketingGUID = '{853dfa57-87ef-4fdb-a6d9-38152b032ac9}';
+        var salesGUID = '{e1250a1e-2ee1-4c3b-963d-c7df6b047176}';
+
+        console.log('Group Membership ' + GetElqGroupMembershipStatus(marketingGUID));
+        console.log('Group Membership ' + GetElqGroupMembershipStatus(salesGUID));
+        document.write('<p><b>' + 'You are a member of this group' + '</b>');
       }
     </script>
 
@@ -86,13 +96,12 @@
         var marketingGUID = '{853dfa57-87ef-4fdb-a6d9-38152b032ac9}';
         var salesGUID = '{e1250a1e-2ee1-4c3b-963d-c7df6b047176}';
         if (this.GetElqGroupMembershipStatus){
-            console.log('Group Membership ' + GetElqGroupMembershipStatus(marketingGUID));
-            console.log('Group Membership ' + GetElqGroupMembershipStatus(salesGUID));
-            if(GetElqGroupMembershipStatus(marketingGUID)){
+            /*if(GetElqGroupMembershipStatus(marketingGUID)){
                 document.write('<p><b>' + 'You are a member of this group' + '</b>');
             }else{
                 document.write('<p><b>' + 'You are not a member of this group' + '</b>');
-            }
+            }*/
+            loadSubscriptions();
         } else {
             document.write('<p><b>' + 'Group membership functions not found' + '</b><p>');
         }
