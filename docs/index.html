@@ -111,6 +111,7 @@
     let firstLookup = true;
     let secondLookup = false;
     let getSubscriptionInfo = false;
+    let numOfSubscriptionCalls = 0;
 
     // Call back function automatically called after data lookup
     function SetElqContent(){
@@ -122,6 +123,7 @@
           firstLookup = false;
           secondLookup = true;
           getSubscriptionInfo = true;
+          numOfSubscriptionCalls++;
           _elqQ.push(['elqDataLookup', escape(emailGroupLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'</'+primaryUniqueField+'>']);  
         }
         else{
@@ -136,6 +138,7 @@
         // If function is available assume that datalookup was successful
         if(this.GetElqContentPersonalizationValue){
           getSubscriptionInfo = true;
+          numOfSubscriptionCalls++;
           console.log(GetElqContentPersonalizationValue('V_ElqEmailAddress'));
           //elqQ.push(['elqDataLookup', escape(emailGroupLookupKey),'<'+primaryUniqueField+'>'+GetElqContentPersonalizationValue('V_ElqEmailAddress')+'</'+primaryUniqueField+'>']); 
         }
@@ -144,7 +147,7 @@
         }
       }
 
-      if(getSubscriptionInfo && !(!secondLookup && firstLookup)){
+      if(getSubscriptionInfo && (numOfSubscriptionCalls == 1)){
         console.log('Enter getSubscriptionInfo');
         if(this.GetElqGroupMembershipStatus){
           loadSubscriptions();
