@@ -17,7 +17,7 @@
     let EloquaSiteId = '2126376800';
     let primaryUniqueField = 'C_EmailAddress';
     const getEmailFromURL = (key) => {
-      let urlParams = new URLSeachParams(window.location.search);
+      let urlParams = new URLSearchParams(window.location.search);
       return decodeURIComponent(urlParams.get(key));
     }
     let emailAddress = getEmailFromURL('email');
