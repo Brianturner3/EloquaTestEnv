@@ -15,16 +15,20 @@
   </head>
   <body>
   <!-- Title -->
-  <h1>Eloqua Test Page: Data Lookups</h1>
-
-  <!-- Body Contents -->
-  <div>
-    <p>First Name: <span></span></p><br>
-    <p>Last Name: <span></span></p><br>
-    <p>Email: <span></span></p><br>
-    <p>State: <span></span></p><br>
-    <p>Zip Code: <span></span></p>
-  </div>
+  <h1>Eloqua Test Page</h1>
+  <!-- Form -->
+  <form action="https://s2126376800.t.eloqua.com/e/f2" method="post" name="BasicForm">
+    <input type="hidden" name="elqCustomerGUID" value="">
+    <input type="hidden" name="elqCookieWrite" value="0">
+    <input type="hidden" name="elqFormName" value="BasicForm">
+    <input type="hidden" name="elqSiteID" value="2126376800">
+    First name:<input type="text" name="firstname"><br>
+    Last name:<input type="text" name="lastname"><br>
+    Email:<input type="email" name="email"><br>
+    State: <input type="text" name="state"><br>
+    Zipcode: <input type="text" name="zipcode"><br>
+    <input type="submit" value="Submit">
+  </form>
 
   <script type='text/javascript'><!--//
   var timerId = null, timeout = 5;
