@@ -46,16 +46,30 @@
     }
   </script>
 
-  <!-- PART 4 : ELOQUA WEB DATA LOOKUPS -->
-  <script type="text/javascript">
-    // Callback function automatically called by the datalookup
-    function SetElqContent(){
-      console.log('Enter Callback');
-      console.log(GetElqContentPersonalizationValue('C_FirstName'))
-    }
+<!-- PART 4 : ELOQUA WEB DATA LOOKUPS -->
+<script type="text/javascript">
+  function CreateRow(label, value) {
+    var p = document.createElement('p');
+    var b = document.createElement('b');
+    p.appendChild(b);
+    b.appendChild(document.createTextNode(label));
+    p.appendChild(document.createTextNode(value));
+    document.getElementById('contactinfo').appendChild(p);
+  }
 
-    _elqQ.push(['elqDataLookup', escape(dataLookupKey),'<C_EmailAddress>'+emailAddress+'</C_EmailAddress>']);
-  </script>
+  function SetElqContent(){ 
+    if (this.GetElqContentPersonalizationValue){
+      CreateRow(': ', GetElqContentPersonalizationValue('C_EmailAddress'));
+      CreateRow(': ', GetElqContentPersonalizationValue('C_FirstName'));
+      CreateRow(': ', GetElqContentPersonalizationValue('C_LastName'));
+      CreateRow(': ', GetElqContentPersonalizationValue('C_State_Prov'));
+      CreateRow(': ', GetElqContentPersonalizationValue('C_Zip_Postal'));
+    } else {
+      CreateRow('Personalization functions not found','');
+  }
+
+  _elqQ.push(['elqDataLookup', escape(dataLookupKey),'<C_EmailAddress>'+emailAddress+'</C_EmailAddress>']);
+</script>
 
   </head>
   <body>
