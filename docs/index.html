@@ -110,7 +110,6 @@
   <script type="text/javascript">
     let firstLookup = true;
     let secondLookup = false;
-    let thirdLookup = false;
     let getSubscriptionInfo = false;
 
     // Call back function automatically called after data lookup
@@ -145,7 +144,7 @@
         }
       }
 
-      if(getSubscriptionInfo){
+      if(getSubscriptionInfo && (!firstLookup || secondLookup){
         console.log('Enter getSubscriptionInfo');
         if(this.GetElqGroupMembershipStatus){
           loadSubscriptions();
