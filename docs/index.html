@@ -10,61 +10,60 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Eloqua Datalookup Test</title>
   <meta name="author" content="name">
-  <meta name="description" content="description here">
-  <meta name="keywords" content="keywords,here">
+  
+  <!-- PART 1 : VARIABLES -->
+  <script type="text/javascript">
+    // Make Changes
+    var EloquaSiteId = '2126376800';
+    var primaryUniqueField = 'C_EmailAddress';
+    var emailAddress = 'brian@salytics.com';
+    var dataLookupKey = 'df645c355f214bda9085fc51b9369e0c'
+    // End Changes
+  </script>
+
+  <!-- PART 2 : STD ELOQUA ASYNCHRONOUS TRACKING CODE -->
   <script type="text/javascript">
       var _elqQ = _elqQ || [];
-      _elqQ.push(['elqSetSiteId','2126376800']);
+      _elqQ.push(['elqSetSiteId', EloquaSiteId]);
       _elqQ.push(['elqTrackPageView']);
-      _elqQ.push(['elqDataLookup', escape('df645c355f214bda9085fc51b9369e0c'),'<C_EmailAddress>brian@salytics.com</C_EmailAddress>']);
 
       (function () {
           function async_load() {
               var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true;
-              s.src = '//img.en25.com/i/elqCfg.min.js';
+              s.src = '//img.en25.com/i/elqCfg.min.js'; //Path to elqCfg.min.js
               var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x);
           }
           if (window.attachEvent) { window.attachEvent('onload', async_load); }
           else { window.addEventListener('DOMContentLoaded', async_load, false); }
       })();
   </script>
-  <!-- Default Tracking Script -->
+
+  <!-- PART 3 : UPDATE DOM -->
+  <script>
+    // Update DOM with data from web data lookup
+    function loadCategories(){
+
+    }
+  </script>
+
+  <!-- PART 4 : ELOQUA WEB DATA LOOKUPS -->
+  <script type="text/javascript">
+    // Callback function automatically called by the datalookup
+    function SetElqContent(){
+      console.log('Enter Callback');
+      console.log(GetElqContentPersonalizationValue('C_FirstName'))
+    }
+
+    elqQ.push(['elqDataLookup', escape(dataLookupKey),'<C_EmailAddress>'+emailAddress+'</C_EmailAddress>']);
+  </script>
 
   </head>
   <body>
   <!-- Title -->
-  <h1>Eloqua Test Page: Data Lookups</h1>
+  <h1>Test Page: Data Lookups</h1>
   <!-- Div to populate -->
-  <div id="contactinfo">
-  </div>
-  <!-- Configuration Script -->
-  <script type='text/javascript'>
-  console.log('Enter Datalookup Code');
-  function CreateRow(label, value) {
-      var p = document.createElement('p');
-      var b = document.createElement('b');
-      p.appendChild(b);
-      b.appendChild(document.createTextNode(label));
-      p.appendChild(document.createTextNode(value));
-
-      document.getElementById('contactinfo').appendChild(p);
-  }
-
-  function SetElqContent(){
-      console.log('Enter SetElqContent');
-      if (this.GetElqContentPersonalizationValue){
-        console.log('Data lookup Found');
-        CreateRow(': ', GetElqContentPersonalizationValue('C_EmailAddress'));
-        CreateRow(': ', GetElqContentPersonalizationValue('C_FirstName'));
-        CreateRow(': ', GetElqContentPersonalizationValue('C_LastName'));
-        CreateRow(': ', GetElqContentPersonalizationValue('C_State_Prov'));
-        CreateRow(': ', GetElqContentPersonalizationValue('C_Zip_Postal'));
-    } else {
-        console.log('Data lookup Not Found');
-        CreateRow('Personalization functions not found','');
-     }
-  }
-  </script>
+    <div id="contactinfo">
+    </div>
 
   </body>
 </html>
