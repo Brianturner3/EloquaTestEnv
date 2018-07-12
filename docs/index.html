@@ -148,7 +148,10 @@
 
 
       if(getSubscriptionInfo){
-        loadSubscriptions();
+        console.log('Enter getSubscriptionInfo');
+        if(this.GetElqGroupMembershipStatus){
+          loadSubscriptions();
+        }
       }
       console.log('Exit SetElqContent');
     }
