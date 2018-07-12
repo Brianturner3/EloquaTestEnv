@@ -144,7 +144,7 @@
         }
       }
 
-      if(getSubscriptionInfo && (!firstLookup || secondLookup){
+      if(getSubscriptionInfo && (!firstLookup || secondLookup)){
         console.log('Enter getSubscriptionInfo');
         if(this.GetElqGroupMembershipStatus){
           loadSubscriptions();
@@ -155,10 +155,6 @@
 
     // Fire Data Lookup A, Contact Data lookup
     _elqQ.push(['elqDataLookup', escape(contactLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'</'+primaryUniqueField+'>']);
-
-    // Fire Data Lookup C, Email Group Data Lookup
-    //_elqQ.push(['elqDataLookup', escape(emailGroupLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'</'+primaryUniqueField+'>']);    
-
   </script>
 
 
