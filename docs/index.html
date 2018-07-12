@@ -92,7 +92,7 @@
         console.log('Group Membership ' + GetElqGroupMembershipStatus(salesGUID));
         // Set Subscription Checkboxes. Make changes here depending on the ID of the checkboxes
         (GetElqGroupMembershipStatus(marketingGUID)) ? document.getElementById('marketingPref').checked = true : document.getElementById('marketingPref').checked = false;
-        (GetElqGroupMembershipStatus(marketingGUID)) ? document.getElementById('salesPref').checked = true : document.getElementById('salesPref').checked = false;
+        (GetElqGroupMembershipStatus(salesGUID)) ? document.getElementById('salesPref').checked = true : document.getElementById('salesPref').checked = false;
       }
     </script>
 
@@ -101,8 +101,7 @@
 
    function SetElqContent(){
       console.log('Enter SetElqContent');
-      let hasLoadedSubscriptions = false;
-      let firstLookup = true;
+      //let hasLoadedSubscriptions = false;
 
       // Check for existence of elq function implying that Datalookup has succeeded (contact)
       if (this.GetElqContentPersonalizationValue){
@@ -130,7 +129,7 @@
     _elqQ.push(['elqDataLookup', escape(contactLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'</'+primaryUniqueField+'>']);
 
     // Fire Data Lookup C, Email Group Data Lookup
-    _elqQ.push(['elqDataLookup', escape(emailGroupLookupKey),primaryUniqueField+emailAddress+primaryUniqueField]);    
+    _elqQ.push(['elqDataLookup', escape(emailGroupLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'</'+primaryUniqueField+'>']);    
 
   </script>
 
