@@ -38,53 +38,67 @@
       })();
   </script>
 
-  <!-- PART 3 : UPDATE DOM -->
-  <script>
-    // Update DOM with data from web data lookup
-    function loadCategories(){
-
-    }
-  </script>
-
-<!-- PART 4 : ELOQUA WEB DATA LOOKUPS -->
-<script type="text/javascript">
-  function CreateRow(label, value) {
-    var p = document.createElement('p');
-    var b = document.createElement('b');
-    p.appendChild(b);
-    b.appendChild(document.createTextNode(label));
-    p.appendChild(document.createTextNode(value));
-    document.getElementById('contactinfo').appendChild(p);
-  }
-
-  function SetElqContent(){
-      //strContactGroupGUID is the Unique Code of the contact group
-      //and can be found in the group editing interface
-
-      //replace the following GUID with the unique code of the group you are interested in testing
-      var strContactGroupGUID = '{853dfa57-87ef-4fdb-a6d9-38152b032ac9}';
-      if (this.GetElqGroupMembershipStatus){
-          console.log('Group Membership ' + GetElqGroupMembershipStatus(strContactGroupGUID));
-          if(GetElqGroupMembershipStatus(strContactGroupGUID)){
-              document.write('<p><b>' + 'You are a member of this group' + '</b>');
-          }else{
-              document.write('<p><b>' + 'You are not a member of this group' + '</b>');
-          }
-      } else {
-          document.write('<p><b>' + 'Group membership functions not found' + '</b><p>');
-      }
-  } 
-
-  _elqQ.push(['elqDataLookup', escape(dataLookupKey),'<C_EmailAddress>'+emailAddress+'</C_EmailAddress>']);
-</script>
-
   </head>
   <body>
   <!-- Title -->
   <h1>Test Page: Data Lookups</h1>
-  <!-- Div to populate -->
-    <div id="contactinfo">
-    </div>
+  <!-- Form to Populate -->
+  <form action="" name="SubscriptionManagementForm" id="SubManageForm">
+    <h5>Categories</h5>
+    <input type="hidden" name="elqCustomerGUID" value="">
+    <input type="hidden" name="elqCookieWrite" value="0">
+    <input type="hidden" name="elqFormName" value="BasicForm">
+    <input type="hidden" name="elqSiteID" value="2126376800">
+    First name:<input type="text" name="firstname"><br>
+    Last name:<input type="text" name="lastname"><br>
+    Email:<input type="email" name="email"><br>
+    State: <input type="text" name="state"><br>
+    Zipcode: <input type="text" name="zipcode"><br>
+    <h5>Email Groups</h5>
+    Marketing Emails:<input type="radio" name="marketing">
+    <input type="submit" value="Submit">
+  </form>
 
+    <!-- PART 3 : UPDATE DOM -->
+    <script>
+      // Update DOM with data from web data lookup
+      function loadCategories(){
+
+      }
+    </script>
+
+  <!-- PART 4 : ELOQUA WEB DATA LOOKUPS -->
+  <script type="text/javascript">
+    function CreateRow(label, value) {
+      var p = document.createElement('p');
+      var b = document.createElement('b');
+      p.appendChild(b);
+      b.appendChild(document.createTextNode(label));
+      p.appendChild(document.createTextNode(value));
+      document.getElementById('contactinfo').appendChild(p);
+    }
+
+    function SetElqContent(){
+        //strContactGroupGUID is the Unique Code of the contact group
+        //and can be found in the group editing interface
+
+        //replace the following GUID with the unique code of the group you are interested in testing
+        var marketingGUID = '{853dfa57-87ef-4fdb-a6d9-38152b032ac9}';
+        var salesGUID = '{e1250a1e-2ee1-4c3b-963d-c7df6b047176}';
+        if (this.GetElqGroupMembershipStatus){
+            console.log('Group Membership ' + GetElqGroupMembershipStatus(marketingGUID));
+            console.log('Group Membership ' + GetElqGroupMembershipStatus(salesGUID));
+            if(GetElqGroupMembershipStatus(marketingGUID)){
+                document.write('<p><b>' + 'You are a member of this group' + '</b>');
+            }else{
+                document.write('<p><b>' + 'You are not a member of this group' + '</b>');
+            }
+        } else {
+            document.write('<p><b>' + 'Group membership functions not found' + '</b><p>');
+        }
+    } 
+
+    _elqQ.push(['elqDataLookup', escape(dataLookupKey),'<C_EmailAddress>'+emailAddress+'</C_EmailAddress>']);
+  </script>
   </body>
 </html>
