@@ -134,7 +134,7 @@
       else if(!firstLookup && secondLookup && !getSubscriptionInfo){
         console.log('Enter Second Lookup');
         // If function is available assume that datalookup was successful
-        if(this.GetElqContentPersonalizationValue && !(secondLookup && !firstLookup) && !(!secondLookup && !firstLookup)){
+        if(this.GetElqContentPersonalizationValue){
           getSubscriptionInfo = true;
           console.log(GetElqContentPersonalizationValue('V_ElqEmailAddress'));
           //elqQ.push(['elqDataLookup', escape(emailGroupLookupKey),'<'+primaryUniqueField+'>'+GetElqContentPersonalizationValue('V_ElqEmailAddress')+'</'+primaryUniqueField+'>']); 
@@ -144,7 +144,7 @@
         }
       }
 
-      if(getSubscriptionInfo){
+      if(getSubscriptionInfo && !(!secondLookup && firstLookup)){
         console.log('Enter getSubscriptionInfo');
         if(this.GetElqGroupMembershipStatus){
           loadSubscriptions();
