@@ -12,12 +12,11 @@
   <meta name="author" content="name">
   <meta name="description" content="description here">
   <meta name="keywords" content="keywords,here">
-
-  <!-- Default Tracking Script -->
   <script type="text/javascript">
       var _elqQ = _elqQ || [];
       _elqQ.push(['elqSetSiteId','2126376800']);
       _elqQ.push(['elqTrackPageView']);
+      _elqQ.push(['elqDataLookup', escape('df645c355f214bda9085fc51b9369e0c'),'<C_EmailAddress>Enter_Email Address_here</C_EmailAddress>']);
 
       (function () {
           function async_load() {
@@ -29,7 +28,15 @@
           else { window.addEventListener('DOMContentLoaded', async_load, false); }
       })();
   </script>
-  <!-- End Default Tracking Script -->
+  <!-- Default Tracking Script -->
+
+  </head>
+  <body>
+  <!-- Title -->
+  <h1>Eloqua Test Page: Data Lookups</h1>
+  <!-- Div to populate -->
+  <div id="contactinfo">
+  </div>
   <!-- Configuration Script -->
   <script type='text/javascript'>
   console.log('Enter Datalookup Code');
@@ -57,19 +64,7 @@
         CreateRow('Personalization functions not found','');
      }
   }
-
-  /* Integration Scripts */
-  _elqQ.push(['elqDataLookup', escape('df645c355f214bda9085fc51b9369e0c'),'<C_EmailAddress>brian@salytics.com</C_EmailAddress>']);
-
   </script>
-
-  </head>
-  <body>
-  <!-- Title -->
-  <h1>Eloqua Test Page: Data Lookups</h1>
-  <!-- Div to populate -->
-  <div id="contactinfo">
-  </div>
 
   </body>
 </html>
