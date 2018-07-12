@@ -55,7 +55,7 @@
     State: <input type="text" name="state"><br>
     Zipcode: <input type="text" name="zipcode"><br>
     <h5>Email Groups</h5>
-    Marketing Emails:<input type="radio" name="marketing">
+    Marketing Emails:<input type="radio" name="marketing" id="EG_Marketing">
     <input type="submit" value="Submit">
   </form>
 
@@ -73,7 +73,7 @@
 
         console.log('Group Membership ' + GetElqGroupMembershipStatus(marketingGUID));
         console.log('Group Membership ' + GetElqGroupMembershipStatus(salesGUID));
-        document.write('<p><b>' + 'You are a member of this group' + '</b>');
+        document.getElementById("#EG_Marketing").checked = true;
       }
     </script>
 
@@ -86,6 +86,7 @@
       b.appendChild(document.createTextNode(label));
       p.appendChild(document.createTextNode(value));
       document.getElementById('contactinfo').appendChild(p);
+      console.log('End loadSubscriptions');
     }
 
     function SetElqContent(){
