@@ -132,7 +132,7 @@
           _elqQ.push(['elqDataLookup', escape(visitoryLookupKey),'']);
         }
       }
-      else if(!firstLookup && secondLookup){
+      else if(!firstLookup && secondLookup && !getSubscriptionInfo){
         console.log('Enter Second Lookup');
         // If function is available assume that datalookup was successful
         if(this.GetElqContentPersonalizationValue){
@@ -143,9 +143,7 @@
         else{
           console.log('Cannot find the contact');
         }
-
       }
-
 
       if(getSubscriptionInfo){
         console.log('Enter getSubscriptionInfo');
