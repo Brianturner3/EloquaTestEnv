@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Simple example of external form sending data to eloqua -->
+<!-- Simple example of page using data lookups to retrieve contact information-->
 <!--[if lte IE 6]><html class="preIE7 preIE8 preIE9"><![endif]-->
 <!--[if IE 7]><html class="preIE8 preIE9"><![endif]-->
 <!--[if IE 8]><html class="preIE9"><![endif]-->
@@ -18,13 +18,45 @@
   <h1>Eloqua Test Page: Data Lookups</h1>
 
   <!-- Body Contents -->
-  <div>
+  <div id="contactInfo">
     <p>First Name: <span></span></p><br>
     <p>Last Name: <span></span></p><br>
     <p>Email: <span></span></p><br>
     <p>State: <span></span></p><br>
     <p>Zip Code: <span></span></p>
   </div>
+
+  <!-- Configuration Script -->
+  <SCRIPT TYPE='text/javascript' LANGUAGE='JavaScript'><!--//
+
+  function CreateRow(label, value) {
+      var p = document.createElement('p');
+      var b = document.createElement('b');
+      p.appendChild(b);
+      b.appendChild(document.createTextNode(label));
+      p.appendChild(document.createTextNode(value));
+      document.getElementById('contactinfo').appendChild(p);
+  }
+
+  function SetElqContent(){ 
+      if (this.GetElqContentPersonalizationValue){
+        CreateRow(': ', GetElqContentPersonalizationValue('C_EmailAddress'));
+        CreateRow(': ', GetElqContentPersonalizationValue('C_FirstName'));
+        CreateRow(': ', GetElqContentPersonalizationValue('C_LastName'));
+        CreateRow(': ', GetElqContentPersonalizationValue('C_State_Prov'));
+        CreateRow(': ', GetElqContentPersonalizationValue('C_Zip_Postal'));
+    } else {
+        CreateRow('Personalization functions not found','');
+     }
+  }
+  //--></SCRIPT>
+
+  <!-- Integration Scripts -->
+  <SCRIPT TYPE='text/javascript' LANGUAGE='JavaScript'>
+
+      _elqQ.push(['elqDataLookup', escape('df645c355f214bda9085fc51b9369e0c'),'<C_EmailAddress>brian+devTest2@salytics.com</C_EmailAddress>']);
+
+  </SCRIPT>
 
   <script type='text/javascript'><!--//
   var timerId = null, timeout = 5;
