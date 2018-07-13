@@ -1,217 +1,200 @@
 <!DOCTYPE html>
-<!-- Simple example of page using data lookups to retrieve visitor data info-->
-<!--[if lte IE 6]><html class="preIE7 preIE8 preIE9"><![endif]-->
-<!--[if IE 7]><html class="preIE8 preIE9"><![endif]-->
-<!--[if IE 8]><html class="preIE9"><![endif]-->
-<!--[if gte IE 9]><!--><html><!--<![endif]-->
+<html>
   <head>
-    <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Eloqua Datalookup Test</title>
-  <meta name="author" content="name">
-  
-  <!-- PART 1 : VARIABLES -->
-  <script type="text/javascript">
-    // Make Changes
-    let EloquaSiteId = '2126376800';
-    let primaryUniqueField = 'C_EmailAddress';
-    const getEmailFromURL = (key) => {
-      let urlParams = new URLSearchParams(window.location.search);
-      return decodeURIComponent(urlParams.get(key));
-    }
-    let emailAddress = getEmailFromURL('email');
-    let contactLookupKey = 'df645c355f214bda9085fc51b9369e0c';
-    let emailGroupLookupKey = '49570d20c1c64fd19d849155906e4c41';
-    let visitoryLookupKey = '413a9d53f2f3459b8f03aad685648a16';
-    let EloquaFormID = 'ElqSubCenter';
-    // End Changes
-  </script>
+    <title>Eloqua Datalookup Example</title>
 
-  <!-- PART 2 : STD ELOQUA ASYNCHRONOUS TRACKING CODE -->
-  <script type="text/javascript">
-      var _elqQ = _elqQ || [];
-      _elqQ.push(['elqSetSiteId', EloquaSiteId]);
-      _elqQ.push(['elqTrackPageView']);
-
-      (function () {
-          function async_load() {
-              var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true;
-              s.src = '//img.en25.com/i/elqCfg.min.js'; //Path to elqCfg.min.js
-              var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x);
-          }
-          if (window.attachEvent) { window.attachEvent('onload', async_load); }
-          else { window.addEventListener('DOMContentLoaded', async_load, false); }
-      })();
-  </script>
-
-  </head>
-  <body>
-  <!-- Title -->
-  <h1>Test Page: Data Lookups</h1>
-  
-  <!-- Form -->
-    <form action="https://s2126376800.t.eloqua.com/e/f2" method="post" name="BasicForm" id="ElqSubCenter">
-      <input type="hidden" name="elqCustomerGUID" value="">
-      <input type="hidden" name="elqCookieWrite" value="0">
-      <input type="hidden" name="elqFormName" value="BasicForm">
-      <input type="hidden" name="elqSiteID" value="2126376800">
-      <h5>Contact Information:</h5><br>
-      First name:<input type="text" name="firstname"><br>
-      Last name:<input type="text" name="lastname"><br>
-      Email:<input type="email" name="email"><br>
-      State: <input type="text" name="state"><br>
-      Zipcode: <input type="text" name="zipcode"><br><br>
-      <h5>Email Preferences:</h5><br>
-      Marketing Emails: <input type="checkbox" name="marketingPref" id="marketingPref"><br>
-      Sales Emails: <input type="checkbox" name="salesPref" id="salesPref"><br>
-      <input type="submit" value="Submit">
-    </form>
-
-    <!-- PART 3 : UPDATE FORM -->
+    <script type="text/javascript" src="http://images.e.coh.org/Web/CityofHopeNationalMedicalCenter/{703a5b4a-bd80-4d6c-8171-85409a8805a3}_jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="http://images.e.coh.org/Web/CityofHopeNationalMedicalCenter/{0c898906-afc0-4a53-960c-6b1251b7dad5}_elq_tracking-1.1.js"></script>
+    
     <script type="text/javascript">
-
-      // Update DOM with contact information from data lookup
-      function loadContactCategories(){
-        console.log('Enter Contact Categories');
-        console.log('First Name: '+ GetElqContentPersonalizationValue('C_FirstName'));
-        console.log('Last Name: '+ GetElqContentPersonalizationValue('C_LastName'));
-        console.log('Email: '+ GetElqContentPersonalizationValue('C_EmailAddress'));
-        console.log('Province: '+ GetElqContentPersonalizationValue('C_State_Prov'));
-        console.log('Zipcode: '+ GetElqContentPersonalizationValue('C_Zip_Postal'));
-      }
-
-      // Update DOM with visitor information from data lookup
-      function loadVisitorCategories(){
-        console.log('Enter Visitor Categories');
-        console.log('First Name: '+ GetElqContentPersonalizationValue('V_ElqFirstName'));
-        console.log('Last Name: '+ GetElqContentPersonalizationValue('V_ElqLastName'));
-        console.log('Email: '+ GetElqContentPersonalizationValue('V_ElqEmailAddress'));
-        console.log('Province: '+ GetElqContentPersonalizationValue('V_ProvinceFromIP'));
-        console.log('Zipcode: '+ GetElqContentPersonalizationValue('V_ZipCodeFromIP'));
-      }
-
-      function loadSubscriptions(){
-        console.log('Enter Subscription');
-        // Make Changes: Email Group and 'Subscription DataLookup Id'
-        var marketingGUID = '{853dfa57-87ef-4fdb-a6d9-38152b032ac9}';
-        var salesGUID = '{e1250a1e-2ee1-4c3b-963d-c7df6b047176}';
-        // End Changes
-
-        console.log('Group Membership ' + GetElqGroupMembershipStatus(marketingGUID));
-        console.log('Group Membership ' + GetElqGroupMembershipStatus(salesGUID));
-        // Set Subscription Checkboxes. Make changes here depending on the ID of the checkboxes
-        (GetElqGroupMembershipStatus(marketingGUID)) ? document.getElementById('marketingPref').checked = true : document.getElementById('marketingPref').checked = false;
-        (GetElqGroupMembershipStatus(salesGUID)) ? document.getElementById('salesPref').checked = true : document.getElementById('salesPref').checked = false;
-      }
-    </script>
-
-  <!-- PART 4 : ELOQUA WEB DATA LOOKUPS -->
-  <script type="text/javascript">
-    let firstLookup = true;
-    let secondLookup = false;
-    let getSubscriptionInfo = false;
-    let numOfSubscriptionCalls = 0;
-
-    // Call back function automatically called after data lookup
-    function elqContent(){
-      console.log('Enter SetElqContent');
-      if(firstLookup){
-        // If function is available assume that datalookup was successful
-        if(this.GetElqContentPersonalizationValue){
-
-          // Call Email Group Data Lookup
-          firstLookup = false;
-          secondLookup = true;
-          getSubscriptionInfo = true;
-          _elqQ.push(['elqDataLookup', escape(emailGroupLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'</'+primaryUniqueField+'>']);  
-        }
-        else{
-          // Call Visitor Data Lookup
-          firstLookup = false;
-          secondLookup = true;
-          _elqQ.push(['elqDataLookup', escape(visitoryLookupKey),'']);
-        }
-      }
-      else if(!firstLookup && secondLookup && !getSubscriptionInfo){
-        console.log('Enter Second Lookup');
-        // If function is available assume that datalookup was successful
-        if(this.GetElqContentPersonalizationValue){
-          getSubscriptionInfo = true;
-          numOfSubscriptionCalls++;
-          console.log(GetElqContentPersonalizationValue('V_ElqEmailAddress'));
-          //elqQ.push(['elqDataLookup', escape(emailGroupLookupKey),'<'+primaryUniqueField+'>'+GetElqContentPersonalizationValue('V_ElqEmailAddress')+'</'+primaryUniqueField+'>']); 
-        }
-        else{
-          console.log('Cannot find the contact');
-        }
-      }
-
-      if(getSubscriptionInfo && (numOfSubscriptionCalls == 1)){
-        console.log('Enter getSubscriptionInfo');
-        numOfSubscriptionCalls++;
-        if(this.GetElqGroupMembershipStatus){
-          loadSubscriptions();
-        }
-      }
-      console.log('Exit SetElqContent');
-    }
-
-
-    var isContactLookupSuccessful = new Promise(
-      function(resolve, reject){
-
-        _elqQ.push(['elqDataLookup', escape(contactLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'</'+primaryUniqueField+'>']);
+    
+      var elqTracker = new jQuery.elq(2126376800);
+      
+      
+      
+      var populateContactInformation = function() {
         
-        function setElqContent(){
-          console.log('Elq Content Set');
+        var mappings = [
+          { formId: "firstName", elqName: "C_EmailAddress" },
+          { formId: "lastName", elqName: "C_FirstName" },
+          { formId: "emailAddress", elqName: "C_LastName" },
+          { formId: "stateProv", elqName: "C_State_Prov" },
+          { formId: "zipPostal", elqName: "C_Zip_Postal" }
+        ];
+        
+        if(typeof GetElqContentPersonalizationValue == "function") {
+          
+          jQuery(function() {
+            for(var mapping in mappings) {
+              var m = mappings[mapping];
+              jQuery("#" + m.formId).val(GetElqContentPersonalizationValue(m.elqName));
+            }
+          });
         }
+      };
+      
+      var populateEmailPreferences = function() {
+        
+        var mappings = [
+          { emailGroup: "Sales", formId: "subscription-careers", elqGUID: "e1250a1e-2ee1-4c3b-963d-c7df6b047176" },
+          { emailGroup: "Marketing", formId: "subscription-enewsletters" , elqGUID: "853dfa57-87ef-4fdb-a6d9-38152b032ac9" },
+          { emailGroup: "Education", formId: "subscription-education" , elqGUID: "dc2537ba-7c87-4201-b4f9-e1fad6905428" },
+          { emailGroup: "Fundraising and Support", formId: "subscription-fundraising" , elqGUID: "72a5e72b-e92d-42ef-9ddd-4d80bda987ad" },
+          { emailGroup: "Medical and Research", formId: "subscription-medical" , elqGUID: "01a4a8ea-4df4-4f36-80d8-b289d3f36547" },
+          { emailGroup: "Clinician", formId: "subscription-clinician" , elqGUID: "8b145f3a-473c-4013-8e7b-7ff5ad3004fc" }
+        ];
+        
+        if(typeof GetElqGroupMembershipStatus == "function") {
+          
+          jQuery(function() {
+            for(var mapping in mappings) {
+              var m = mappings[mapping];
+              if(GetElqGroupMembershipStatus(m.elqGUID)) {
+                jQuery("#" + m.formId).prop("checked", true);
+              }
+            }
+          });
+        }
+      };
+    
+      
+      //track pageView
+      elqTracker.pageTrack({
+        success: function() {
+          
+          //contact lookup by query key (email);
+          const getEmailFromURL = (key) => {
+            let urlParams = new URLSearchParams(window.location.search);
+            return decodeURIComponent(urlParams.get(key));
+          }
+          var cEmailAddress = getEmailFromURL("email");
 
-        if(this.GetElqContentPersonalizationValue){
-          resolve();
-        }
-        else{
-          let reason = new Error('Sorry, invalid email');
-          reject(reason);
+          if(cEmailAddress != "") {
+            //contact lookup by email address
+            elqTracker.getData({
+              key: "df645c355f214bda9085fc51b9369e0c",
+              lookup: "<C_EmailAddress>" + cEmailAddress + "</C_EmailAddress>",
+              success: function() {
+
+                if (typeof GetElqContentPersonalizationValue == "function") {
+
+                  //group membership lookup by email address
+                  (new jQuery.elq(1399701292)).getData({
+                    key: "49570d20c1c64fd19d849155906e4c41",
+                    lookup: "<C_EmailAddress>" + cEmailAddress + "</C_EmailAddress>",
+                    success: function() {
+                      populateContactInformation();
+                      populateEmailPreferences();
+                    }
+                  });
+                }
+                else {
+                  //visitor lookup using cookie guid
+                  elqTracker.getData({
+                    key: "413a9d53f2f3459b8f03aad685648a16",
+                    lookup: "",
+                    success: function() {
+                      
+                      if(typeof GetElqContentPersonalizationValue == "function") { 
+
+                        var vEmailAddress = GetElqContentPersonalizationValue("V_ElqEmailAddress");
+
+                        if(vEmailAddress != "") {
+                          //contact lookup by email address
+                          elqTracker.getData({
+                            key: "df645c355f214bda9085fc51b9369e0c",
+                            lookup: "<C_EmailAddress>" + vEmailAddress + "</C_EmailAddress>",
+                            success: populateContactInformation
+                          });
+                          
+                          //group membership lookup by email address
+                          (new jQuery.elq(1399701292)).getData({
+                            key: "49570d20c1c64fd19d849155906e4c41",
+                            lookup: "<C_EmailAddress>" + vEmailAddress + "</C_EmailAddress>",
+                            success: populateEmailPreferences
+                          });
+                        }
+                      }
+                    }
+                  });
+                }
+              }
+            });
+          }
         }
       });
+    </script>
+    
+    <style type="text/css">
+      .form label { width: 560px; float: left; clear: both; }
+      .form input[type=submit] { margin-left: 560px; }
+    </style>
+  </head>
+  
+  <body>
 
-    var startLookup = function(){
-      isContactLookupSuccessful.then(function(fulfilled){
-        console.log('fulfilled');
-        elqContent();
-      })
-      .catch(function(error){
-        console.log(error.message);
-      })
-    }()
+    <h2>Test Page: Data Lookups</h2>
+  
+    <!-- Form -->
+    <div class="form">
+    <form action="https://s1399701292.t.eloqua.com/e/f2" method="post">
+      <input type="hidden" name="elqFormName" value="Global-Subscription" />
+      <input type="hidden" name="elqSiteID" value="1399701292" />
+      
+      
+      <h4>Contact Information</h4>
+      
+      <label for="firstName">First Name</label>
+      <input type="text" name="firstName" id="firstName" />
+      <br/>
+      
+      <label for="lastName">Last Name</label>
+      <input type="text" name="lastName" id="lastName" />
+      <br/>
+      
+      <label for="emailAddress">Email</label>
+      <input type="text" name="emailAddress" id="emailAddress" />
+      <br/>
+      
+      <label for="stateProv">State / Province</label>
+      <input type="text" name="stateProv" id="stateProv" />
+      <br/>
+      
+      <label for="zipPostal">ZIP / Postal Code</label>
+      <input type="text" name="zipPostal" id="zipPostal" />
+      <br/>
+      
+      
+      <h4>Email Preferences:</h4>
+      
+      <label for="subscription-careers">Careers (career opportunities and job fair info)</label>
+      <input type="checkbox" name="subscription-careers" id="subscription-careers" />
+      <br/>
+      
+      <label for="subscription-enewsletters">E-Newsletters (eHope and other e-publications)</label>
+      <input type="checkbox" name="subscription-enewsletters" id="subscription-enewsletters" />
+      <br/>
+      
+      <label for="subscription-education">Education (continuing medical education, lectures and more)</label>
+      <input type="checkbox" name="subscription-education" id="subscription-education" />
+      <br/>
+      
+      <label for="subscription-fundraising">Fundraising and Support (fundraising events and other ways to support)</label>
+      <input type="checkbox" name="subscription-fundraising" id="subscription-fundraising" />
+      <br/>
+      
+      <label for="subscription-medical">Medical and Research (research and medical center news and updates)</label>
+      <input type="checkbox" name="subscription-medical" id="subscription-medical" />
+      <br/>
+      
+      <label for="subscription-clinician">I am a clinician and am interested in additional communications from COH.</label>
+      <input type="checkbox" name="subscription-clinician" id="subscription-clinician" />
+      <br/>
+      
+      <input type="submit" value="Submit">
+    </form>
+    </div>
 
-    // Fire Data Lookup A, Contact Data lookup
-    //_elqQ.push(['elqDataLookup', escape(contactLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'</'+primaryUniqueField+'>']);
-  </script>
 
-
-  <!-- Script needed for form submission -->
-  <script type='text/javascript'><!--//
-  var timerId = null, timeout = 5;
-  //--></script>
-  <script type='text/javascript'><!--//
-  function WaitUntilCustomerGUIDIsRetrieved() {
-  if (!!(timerId)) {
-      if (timeout == 0) {
-  return;
-  }
-  if (typeof this.GetElqCustomerGUID === 'function') {
-          document.forms["BasicForm"].elements["elqCustomerGUID"].value = GetElqCustomerGUID();
-  return;
-  }
-  timeout -= 1;
-  }
-  timerId = setTimeout("WaitUntilCustomerGUIDIsRetrieved()", 500);
-  return;
-  }
-  window.onload = WaitUntilCustomerGUIDIsRetrieved;
-  _elqQ.push(['elqGetCustomerGUID']);
-  //--></script>
   </body>
 </html>
