@@ -114,16 +114,16 @@
     let numOfSubscriptionCalls = 0;
 
     // Call back function automatically called after data lookup
-    function SetElqContent(){
+    function elqContent(){
       console.log('Enter SetElqContent');
       if(firstLookup){
         // If function is available assume that datalookup was successful
         if(this.GetElqContentPersonalizationValue){
+
           // Call Email Group Data Lookup
           firstLookup = false;
           secondLookup = true;
           getSubscriptionInfo = true;
-          numOfSubscriptionCalls++;
           _elqQ.push(['elqDataLookup', escape(emailGroupLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'</'+primaryUniqueField+'>']);  
         }
         else{
@@ -149,6 +149,7 @@
 
       if(getSubscriptionInfo && (numOfSubscriptionCalls == 1)){
         console.log('Enter getSubscriptionInfo');
+        numOfSubscriptionCalls++;
         if(this.GetElqGroupMembershipStatus){
           loadSubscriptions();
         }
@@ -156,8 +157,37 @@
       console.log('Exit SetElqContent');
     }
 
+
+    var isContactLookupSuccessful = new Promise(
+      function(resolve, reject){
+
+        _elqQ.push(['elqDataLookup', escape(contactLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'</'+primaryUniqueField+'>']);
+        
+        function setElqContent(){
+          console.log('Elq Content Set');
+        }
+
+        if(this.GetElqContentPersonalizationValue){
+          resolve();
+        }
+        else{
+          let reason = new Error('Sorry, invalid email');
+          reject(reason);
+        }
+      });
+
+    var startLookup = function(){
+      isContactLookupSuccessful.then(function(fulfilled){
+        console.log('fulfilled');
+        elqContent();
+      })
+      .catch(function(error){
+        console.log(error.message);
+      })
+    }
+
     // Fire Data Lookup A, Contact Data lookup
-    _elqQ.push(['elqDataLookup', escape(contactLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'</'+primaryUniqueField+'>']);
+    //_elqQ.push(['elqDataLookup', escape(contactLookupKey),'<'+primaryUniqueField+'>'+emailAddress+'</'+primaryUniqueField+'>']);
   </script>
 
 
