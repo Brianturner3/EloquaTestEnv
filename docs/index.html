@@ -3,8 +3,25 @@
   <head>
     <title>Eloqua Datalookup Example</title>
 
-    <script type="text/javascript" src="http://images.e.coh.org/Web/CityofHopeNationalMedicalCenter/{703a5b4a-bd80-4d6c-8171-85409a8805a3}_jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" src="http://images.e.coh.org/Web/CityofHopeNationalMedicalCenter/{0c898906-afc0-4a53-960c-6b1251b7dad5}_elq_tracking-1.1.js"></script>
+  <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+  <script type="text/javascript">
+      var _elqQ = _elqQ || [];
+      _elqQ.push(['elqSetSiteId', EloquaSiteId]);
+      _elqQ.push(['elqTrackPageView']);
+
+      (function () {
+          function async_load() {
+              var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true;
+              s.src = '//img.en25.com/i/elqCfg.min.js'; //Path to elqCfg.min.js
+              var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x);
+          }
+          if (window.attachEvent) { window.attachEvent('onload', async_load); }
+          else { window.addEventListener('DOMContentLoaded', async_load, false); }
+      })();
+  </script>
     
     <script type="text/javascript">
     
