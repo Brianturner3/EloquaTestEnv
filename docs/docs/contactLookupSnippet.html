@@ -1,0 +1,22 @@
+//contact lookup by query key (email);
+const getEmailFromURL = (key) => {
+  let urlParams = new URLSearchParams(window.location.search);
+  return decodeURIComponent(urlParams.get(key));
+}
+var cEmailAddress = getEmailFromURL('email');
+
+if(cEmailAddress != "") {
+	//contact lookup by email address
+	elqTracker.getData({
+		key: "ee365ef052b74a018daa35ca3a99017a",
+		lookup: "<C_EmailAddress>" + cEmailAddress + "</C_EmailAddress>",
+		success: populateContactInformation
+	});
+	
+	//group membership lookup by email address
+	(new jQuery.elq(1399701292)).getData({
+		key: "a0ba82e63c004aafa1a66a0bbf0adfd0",
+		lookup: "<C_EmailAddress>" + cEmailAddress + "</C_EmailAddress>",
+		success: populateEmailPreferences
+	});
+}

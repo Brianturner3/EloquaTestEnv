@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<!-- Simple example of page using data lookups to retrieve visitor data info-->
+<!--[if lte IE 6]><html class="preIE7 preIE8 preIE9"><![endif]-->
+<!--[if IE 7]><html class="preIE8 preIE9"><![endif]-->
+<!--[if IE 8]><html class="preIE9"><![endif]-->
+<!--[if gte IE 9]><!--><html><!--<![endif]-->
+  <head>
+    <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Eloqua Datalookup Test</title>
+  <meta name="author" content="name">
+  
+  <!-- PART 1 : VARIABLES -->
+  <script type="text/javascript">
+    // Make Changes
+    var EloquaSiteId = '2126376800';
+    var primaryUniqueField = 'C_EmailAddress';
+    var emailAddress = 'brian@salytics.com';
+    var dataLookupKey = '413a9d53f2f3459b8f03aad685648a16'
+    var visitoryLookupKey = '413a9d53f2f3459b8f03aad685648a16';
+    // End Changes
+  </script>
+
+  <!-- PART 2 : STD ELOQUA ASYNCHRONOUS TRACKING CODE -->
+  <script type="text/javascript">
+      var _elqQ = _elqQ || [];
+      _elqQ.push(['elqSetSiteId', EloquaSiteId]);
+      _elqQ.push(['elqTrackPageView']);
+
+      (function () {
+          function async_load() {
+              var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true;
+              s.src = '//img.en25.com/i/elqCfg.min.js'; //Path to elqCfg.min.js
+              var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x);
+          }
+          if (window.attachEvent) { window.attachEvent('onload', async_load); }
+          else { window.addEventListener('DOMContentLoaded', async_load, false); }
+      })();
+  </script>
+
+  </head>
+  <body>
+  <!-- Title -->
+  <h1>Test Page: Data Lookups</h1>
+  <!-- Form to Populate -->
+  <!-- Form -->
+    <form action="https://s2126376800.t.eloqua.com/e/f2" method="post" name="BasicForm">
+      <input type="hidden" name="elqCustomerGUID" value="">
+      <input type="hidden" name="elqCookieWrite" value="0">
+      <input type="hidden" name="elqFormName" value="BasicForm">
+      <input type="hidden" name="elqSiteID" value="2126376800">
+      First name:<input type="text" name="firstname"><br>
+      Last name:<input type="text" name="lastname"><br>
+      Email:<input type="email" name="email"><br>
+      State: <input type="text" name="state"><br>
+      Zipcode: <input type="text" name="zipcode"><br>
+      <input type="submit" value="Submit">
+    </form>
+
+    <script type='text/javascript'><!--//
+    var timerId = null, timeout = 5;
+    //--></script>
+    <script type='text/javascript'><!--//
+    function WaitUntilCustomerGUIDIsRetrieved() {
+    if (!!(timerId)) {
+        if (timeout == 0) {
+    return;
+    }
+    if (typeof this.GetElqCustomerGUID === 'function') {
+            document.forms["BasicForm"].elements["elqCustomerGUID"].value = GetElqCustomerGUID();
+    return;
+    }
+    timeout -= 1;
+    }
+    timerId = setTimeout("WaitUntilCustomerGUIDIsRetrieved()", 500);
+    return;
+    }
+    window.onload = WaitUntilCustomerGUIDIsRetrieved;
+    _elqQ.push(['elqGetCustomerGUID']);
+    //--></script>
+
+    <!-- PART 3 : UPDATE DOM -->
+    <script>
+
+      // Update DOM with data from web data lookup
+      function loadCategories(){
+        console.log('First Name: '+ GetElqContentPersonalizationValue('V_ElqFirstName'));
+        console.log('First Name: '+ GetElqContentPersonalizationValue('V_ElqLastName'));
+        console.log('First Name: '+ GetElqContentPersonalizationValue('V_ElqEmailAddress'));
+        console.log('First Name: '+ GetElqContentPersonalizationValue('V_ProvinceFromIP'));
+        console.log('First Name: '+ GetElqContentPersonalizationValue('V_ZipCodeFromIP'));
+      }
+
+      function loadSubscriptions(){
+        var marketingGUID = '{853dfa57-87ef-4fdb-a6d9-38152b032ac9}';
+        var salesGUID = '{e1250a1e-2ee1-4c3b-963d-c7df6b047176}';
+
+        console.log('First Name: '+ GetElqContentPersonalizationValue('V_ElqFirstName'));
+        console.log('First Name: '+ GetElqContentPersonalizationValue('V_ElqLastName'));
+        console.log('First Name: '+ GetElqContentPersonalizationValue('V_ElqEmailAddress'));
+        console.log('First Name: '+ GetElqContentPersonalizationValue('V_ProvinceFromIP'));
+        console.log('First Name: '+ GetElqContentPersonalizationValue('V_ZipCodeFromIP'));
+      
+      }
+    </script>
+
+  <!-- PART 4 : ELOQUA WEB DATA LOOKUPS -->
+  <script type="text/javascript">
+    function CreateRow(label, value) {
+      var p = document.createElement('p');
+      var b = document.createElement('b');
+      p.appendChild(b);
+      b.appendChild(document.createTextNode(label));
+      p.appendChild(document.createTextNode(value));
+      document.getElementById('contactinfo').appendChild(p);
+      console.log('End loadSubscriptions');
+    }
+
+    function SetElqContent(){
+        //strContactGroupGUID is the Unique Code of the contact group
+        //and can be found in the group editing interface
+
+        //replace the following GUID with the unique code of the group you are interested in testing
+        var marketingGUID = '{853dfa57-87ef-4fdb-a6d9-38152b032ac9}';
+        var salesGUID = '{e1250a1e-2ee1-4c3b-963d-c7df6b047176}';
+        if (this.GetElqContentPersonalizationValue){
+            /*if(GetElqGroupMembershipStatus(marketingGUID)){
+                document.write('<p><b>' + 'You are a member of this group' + '</b>');
+            }else{
+                document.write('<p><b>' + 'You are not a member of this group' + '</b>');
+            }*/
+            loadCategories();
+        } else {
+            document.write('<p><b>' + 'Group membership functions not found' + '</b><p>');
+        }
+    } 
+
+    _elqQ.push(['elqDataLookup', escape(visitoryLookupKey),'']);
+  </script>
+  </body>
+</html>
