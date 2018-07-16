@@ -1,199 +1,263 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Eloqua Datalookup Example</title>
+	<head>
+		<title>Eloqua Datalookup Example</title>
+		<!-- Jquery -->
+		<script type="text/javascript" src="default-elq-tracking.js"></script>
+		<script type="text/javascript" src="jquery-min-3.3.js"></script>
+		<script type="text/javascript" src="elq_tracking-1.0.js"></script>
+		<!-- <script type="text/javascript" src="http://images.e.coh.org/Web/CityofHopeNationalMedicalCenter/{703a5b4a-bd80-4d6c-8171-85409a8805a3}_jquery-3.3.1.min.js"></script> -->
+		<!-- <script type="text/javascript" src="http://images.e.coh.org/Web/CityofHopeNationalMedicalCenter/{0c898906-afc0-4a53-960c-6b1251b7dad5}_elq_tracking-1.1.js"></script> -->
+		
+		<script type="text/javascript">
+		
+			var elqTracker = new jQuery.elq(2126376800);
+			
+			
+			
+			var populateContactInformation = function() {
+				
+				var mappings = [
+					{ formId: "firstName", elqName: "C_FirstName" },
+					{ formId: "lastName", elqName: "C_LastName" },
+					{ formId: "emailAddress", elqName: "C_EmailAddress" },
+					{ formId: "stateProv", elqName: "C_State_Prov" },
+					{ formId: "zipPostal", elqName: "C_Zip_Postal" },
+					{ formId: "clinicianSpecialty", elqName : "C_Clinician_Specilaty1"}
+				];
+				
+				if(typeof GetElqContentPersonalizationValue == "function") {
+					
+					jQuery(function() {
+						for(var mapping in mappings) {
+							var m = mappings[mapping];
+							jQuery("#" + m.formId).val(GetElqContentPersonalizationValue(m.elqName));
+						}
+					});
+				}
+			};
+			
+			var populateEmailPreferences = function() {
+				
+				var mappings = [
+					{ emailGroup: "Careers", formId: "subscription-careers", elqGUID: "853dfa57-87ef-4fdb-a6d9-38152b032ac9" },
+					{ emailGroup: "E-Newsletters", formId: "subscription-enewsletters" , elqGUID: "e1250a1e-2ee1-4c3b-963d-c7df6b047176" },
+					{ emailGroup: "Education", formId: "subscription-education" , elqGUID: "dc2537ba-7c87-4201-b4f9-e1fad6905428" },
+					{ emailGroup: "Fundraising and Support", formId: "subscription-fundraising" , elqGUID: "72a5e72b-e92d-42ef-9ddd-4d80bda987ad" },
+					{ emailGroup: "Medical and Research", formId: "subscription-medical" , elqGUID: "01a4a8ea-4df4-4f36-80d8-b289d3f36547" },
+					{ emailGroup: "Clinician", formId: "subscription-clinician" , elqGUID: "8b145f3a-473c-4013-8e7b-7ff5ad3004fc" }
+				];
+				
+				if(typeof GetElqGroupMembershipStatus == "function") {
+					
+					jQuery(function() {
+						for(var mapping in mappings) {
+							var m = mappings[mapping];
+							if(GetElqGroupMembershipStatus(m.elqGUID)) {
+								jQuery("#" + m.formId).prop("checked", true);
+							}
+						}
+					});
+				}
+			};
+		
+			
+			//track pageView
+			elqTracker.pageTrack({
+				success: function() { 
+					
+					//contact lookup by query key (email);
+					const getEmailFromURL = (key) => {
+					  let urlParams = new URLSearchParams(window.location.search);
+					  return decodeURIComponent(urlParams.get(key));
+					}
+					var cEmailAddress = getEmailFromURL("email");
+					if(cEmailAddress != "") {
+						//contact lookup by email address
+						elqTracker.getData({
+							key: "df645c355f214bda9085fc51b9369e0c",
+							lookup: "<C_EmailAddress>" + cEmailAddress + "</C_EmailAddress>",
+							success: function() {
+								if (typeof GetElqContentPersonalizationValue == "function") {
+									//group membership lookup by email address
+									(new jQuery.elq(2126376800)).getData({
+										key: "49570d20c1c64fd19d849155906e4c41",
+										lookup: "<C_EmailAddress>" + cEmailAddress + "</C_EmailAddress>",
+										success: function() {
+											populateContactInformation();
+											populateEmailPreferences();
+										}
+									});
+								}
+								else {
+									//visitor lookup using cookie guid
+									elqTracker.getData({
+										key: "413a9d53f2f3459b8f03aad685648a16",
+										lookup: "",
+										success: function() {
+											
+											if(typeof GetElqContentPersonalizationValue == "function") { 
+												var vEmailAddress = GetElqContentPersonalizationValue("V_ElqEmailAddress");
+												if(vEmailAddress != "") {
+													//contact lookup by email address
+													elqTracker.getData({
+														key: "df645c355f214bda9085fc51b9369e0c",
+														lookup: "<C_EmailAddress>" + vEmailAddress + "</C_EmailAddress>",
+														success: populateContactInformation
+													});
+													
+													//group membership lookup by email address
+													(new jQuery.elq(2126376800)).getData({
+														key: "49570d20c1c64fd19d849155906e4c41",
+														lookup: "<C_EmailAddress>" + vEmailAddress + "</C_EmailAddress>",
+														success: populateEmailPreferences
+													});
+												}
+											}
+										}
+									});
+								}
+							}
+						});
+					}
+					else {
+						//visitor lookup using cookie guid
+						elqTracker.getData({
+							key: "413a9d53f2f3459b8f03aad685648a16",
+							lookup: "",
+							success: function() {
+								
+								if(typeof GetElqContentPersonalizationValue == "function") { 
 
-    <script type="text/javascript" src="http://images.e.coh.org/Web/CityofHopeNationalMedicalCenter/{703a5b4a-bd80-4d6c-8171-85409a8805a3}_jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" src="http://images.e.coh.org/Web/CityofHopeNationalMedicalCenter/{0c898906-afc0-4a53-960c-6b1251b7dad5}_elq_tracking-1.1.js"></script>
-    
-    <script type="text/javascript">
-    
-      var elqTracker = new jQuery.elq(2126376800);
-      
-      
-      
-      var populateContactInformation = function() {
-        
-        var mappings = [
-          { formId: "firstName", elqName: "C_EmailAddress" },
-          { formId: "lastName", elqName: "C_FirstName" },
-          { formId: "emailAddress", elqName: "C_LastName" },
-          { formId: "stateProv", elqName: "C_State_Prov" },
-          { formId: "zipPostal", elqName: "C_Zip_Postal" }
-        ];
-        
-        if(typeof GetElqContentPersonalizationValue == "function") {
-          
-          jQuery(function() {
-            for(var mapping in mappings) {
-              var m = mappings[mapping];
-              jQuery("#" + m.formId).val(GetElqContentPersonalizationValue(m.elqName));
-            }
-          });
-        }
-      };
-      
-      var populateEmailPreferences = function() {
-        
-        var mappings = [
-          { emailGroup: "Sales", formId: "subscription-careers", elqGUID: "e1250a1e-2ee1-4c3b-963d-c7df6b047176" },
-          { emailGroup: "Marketing", formId: "subscription-enewsletters" , elqGUID: "853dfa57-87ef-4fdb-a6d9-38152b032ac9" },
-          { emailGroup: "Education", formId: "subscription-education" , elqGUID: "dc2537ba-7c87-4201-b4f9-e1fad6905428" },
-          { emailGroup: "Fundraising and Support", formId: "subscription-fundraising" , elqGUID: "72a5e72b-e92d-42ef-9ddd-4d80bda987ad" },
-          { emailGroup: "Medical and Research", formId: "subscription-medical" , elqGUID: "01a4a8ea-4df4-4f36-80d8-b289d3f36547" },
-          { emailGroup: "Clinician", formId: "subscription-clinician" , elqGUID: "8b145f3a-473c-4013-8e7b-7ff5ad3004fc" }
-        ];
-        
-        if(typeof GetElqGroupMembershipStatus == "function") {
-          
-          jQuery(function() {
-            for(var mapping in mappings) {
-              var m = mappings[mapping];
-              if(GetElqGroupMembershipStatus(m.elqGUID)) {
-                jQuery("#" + m.formId).prop("checked", true);
-              }
-            }
-          });
-        }
-      };
-    
-      
-      //track pageView
-      elqTracker.pageTrack({
-        success: function() {
-          
-          //contact lookup by query key (email);
-          const getEmailFromURL = (key) => {
-            let urlParams = new URLSearchParams(window.location.search);
-            return decodeURIComponent(urlParams.get(key));
-          }
-          var cEmailAddress = getEmailFromURL("email");
+									var vEmailAddress = GetElqContentPersonalizationValue("V_ElqEmailAddress");
 
-          if(cEmailAddress != "") {
-            //contact lookup by email address
-            elqTracker.getData({
-              key: "df645c355f214bda9085fc51b9369e0c",
-              lookup: "<C_EmailAddress>" + cEmailAddress + "</C_EmailAddress>",
-              success: function() {
+									if(vEmailAddress != "") {
+										//contact lookup by email address
+										elqTracker.getData({
+											key: "df645c355f214bda9085fc51b9369e0c",
+											lookup: "<C_EmailAddress>" + vEmailAddress + "</C_EmailAddress>",
+											success: populateContactInformation
+										});
+										
+										//group membership lookup by email address
+										(new jQuery.elq(2126376800)).getData({
+											key: "49570d20c1c64fd19d849155906e4c41",
+											lookup: "<C_EmailAddress>" + vEmailAddress + "</C_EmailAddress>",
+											success: populateEmailPreferences
+										});
+									}
+								}
+							}
+						});
+					}
+				}
+			});
+		</script>
 
-                if (typeof GetElqContentPersonalizationValue == "function") {
-
-                  //group membership lookup by email address
-                  (new jQuery.elq(1399701292)).getData({
-                    key: "49570d20c1c64fd19d849155906e4c41",
-                    lookup: "<C_EmailAddress>" + cEmailAddress + "</C_EmailAddress>",
-                    success: function() {
-                      populateContactInformation();
-                      populateEmailPreferences();
-                    }
-                  });
-                }
-                else {
-                  //visitor lookup using cookie guid
-                  elqTracker.getData({
-                    key: "413a9d53f2f3459b8f03aad685648a16",
-                    lookup: "",
-                    success: function() {
-                      
-                      if(typeof GetElqContentPersonalizationValue == "function") { 
-
-                        var vEmailAddress = GetElqContentPersonalizationValue("V_ElqEmailAddress");
-
-                        if(vEmailAddress != "") {
-                          //contact lookup by email address
-                          elqTracker.getData({
-                            key: "df645c355f214bda9085fc51b9369e0c",
-                            lookup: "<C_EmailAddress>" + vEmailAddress + "</C_EmailAddress>",
-                            success: populateContactInformation
-                          });
-                          
-                          //group membership lookup by email address
-                          (new jQuery.elq(1399701292)).getData({
-                            key: "49570d20c1c64fd19d849155906e4c41",
-                            lookup: "<C_EmailAddress>" + vEmailAddress + "</C_EmailAddress>",
-                            success: populateEmailPreferences
-                          });
-                        }
-                      }
-                    }
-                  });
-                }
-              }
-            });
-          }
-        }
-      });
-    </script>
-    
-    <style type="text/css">
-      .form label { width: 560px; float: left; clear: both; }
-      .form input[type=submit] { margin-left: 560px; }
-    </style>
-  </head>
+	</head>
   
-  <body>
+	<body>
 
-    <h2>Test Page: Data Lookups</h2>
+		<h2>Test Page: Manage Preferences</h2>
   
-    <!-- Form -->
-    <div class="form">
-    <form action="https://s1399701292.t.eloqua.com/e/f2" method="post">
-      <input type="hidden" name="elqFormName" value="Global-Subscription" />
-      <input type="hidden" name="elqSiteID" value="1399701292" />
-      
-      
-      <h4>Contact Information</h4>
-      
-      <label for="firstName">First Name</label>
-      <input type="text" name="firstName" id="firstName" />
-      <br/>
-      
-      <label for="lastName">Last Name</label>
-      <input type="text" name="lastName" id="lastName" />
-      <br/>
-      
-      <label for="emailAddress">Email</label>
-      <input type="text" name="emailAddress" id="emailAddress" />
-      <br/>
-      
-      <label for="stateProv">State / Province</label>
-      <input type="text" name="stateProv" id="stateProv" />
-      <br/>
-      
-      <label for="zipPostal">ZIP / Postal Code</label>
-      <input type="text" name="zipPostal" id="zipPostal" />
-      <br/>
-      
-      
-      <h4>Email Preferences:</h4>
-      
-      <label for="subscription-careers">Careers (career opportunities and job fair info)</label>
-      <input type="checkbox" name="subscription-careers" id="subscription-careers" />
-      <br/>
-      
-      <label for="subscription-enewsletters">E-Newsletters (eHope and other e-publications)</label>
-      <input type="checkbox" name="subscription-enewsletters" id="subscription-enewsletters" />
-      <br/>
-      
-      <label for="subscription-education">Education (continuing medical education, lectures and more)</label>
-      <input type="checkbox" name="subscription-education" id="subscription-education" />
-      <br/>
-      
-      <label for="subscription-fundraising">Fundraising and Support (fundraising events and other ways to support)</label>
-      <input type="checkbox" name="subscription-fundraising" id="subscription-fundraising" />
-      <br/>
-      
-      <label for="subscription-medical">Medical and Research (research and medical center news and updates)</label>
-      <input type="checkbox" name="subscription-medical" id="subscription-medical" />
-      <br/>
-      
-      <label for="subscription-clinician">I am a clinician and am interested in additional communications from COH.</label>
-      <input type="checkbox" name="subscription-clinician" id="subscription-clinician" />
-      <br/>
-      
-      <input type="submit" value="Submit">
-    </form>
-    </div>
+		<!-- Form -->
+		<div class="form">
+		<form action="https://s2126376800.t.eloqua.com/e/f2" method="post" name="GEPCManagePreference">
+			<input type="hidden" name="elqFormName" value="GEPCManagePreference">
+			<input type="hidden" name="elqSiteID" value="2126376800">
+			<!--<input type="hidden" name="elqFormName" value="Global-Subscription" />
+			<input type="hidden" name="elqSiteID" value="1399701292" /> -->
+			<input type="hidden" name="elqCustomerGUID" value="">
+			<input type="hidden" name="elqCookieWrite" value="0">
+			
+			
+			<h4>Contact Information</h4>
+			
+			<label for="firstName">First Name</label>
+			<input type="text" name="firstName" id="firstName" />
+			<br/>
+			
+			<label for="lastName">Last Name</label>
+			<input type="text" name="lastName" id="lastName" />
+			<br/>
+			
+			<label for="emailAddress">Email</label>
+			<input type="text" name="emailAddress" id="emailAddress" />
+			<br/>
+			
+			<label for="stateProv">State / Province</label>
+			<input type="text" name="stateProv" id="stateProv" />
+			<br/>
+			
+			<label for="zipPostal">ZIP / Postal Code</label>
+			<input type="text" name="zipPostal" id="zipPostal" />
+			<br/>
+			
+			
+			<h4>Email Preferences:</h4>
+			
+			<label for="subscription-careers">Careers (career opportunities and job fair info)</label>
+			<input type="checkbox" name="subscription-careers" id="subscription-careers" />
+			<br/>
+			
+			<label for="subscription-enewsletters">E-Newsletters (eHope and other e-publications)</label>
+			<input type="checkbox" name="subscription-enewsletters" id="subscription-enewsletters" />
+			<br/>
+			
+			<label for="subscription-education">Education (continuing medical education, lectures and more)</label>
+			<input type="checkbox" name="subscription-education" id="subscription-education" />
+			<br/>
+			
+			<label for="subscription-fundraising">Fundraising and Support (fundraising events and other ways to support)</label>
+			<input type="checkbox" name="subscription-fundraising" id="subscription-fundraising" />
+			<br/>
+			
+			<label for="subscription-medical">Medical and Research (research and medical center news and updates)</label>
+			<input type="checkbox" name="subscription-medical" id="subscription-medical" />
+			<br/>
+			
+			<label for="subscription-clinician">I am a clinician and am interested in additional communications from COH.</label>
+			<input type="checkbox" name="subscription-clinician" id="subscription-clinician" />
+			<br/>
+
+			<label for="clinician-specialty">Specialty</label>
+			<select name="clinician-specialty" id="clinicianSpecialty">
+				<option value="dietician">Dietician</option>
+				<option value="nutritionist">Nutritionist</option>
+			</select>
+			
+			<input type="submit" value="Submit">
+		</form>
+
+		<script type='text/javascript'><!--//
+		var timerId = null, timeout = 5;
+		//--></script>
+		<script type='text/javascript'><!--//
+		function WaitUntilCustomerGUIDIsRetrieved() {
+		if (!!(timerId)) {
+		    if (timeout == 0) {
+		return;
+		}
+		if (typeof this.GetElqCustomerGUID === 'function') {
+		        document.forms["GEPCManagePreference"].elements["elqCustomerGUID"].value = GetElqCustomerGUID();
+		return;
+		}
+		timeout -= 1;
+		}
+		timerId = setTimeout("WaitUntilCustomerGUIDIsRetrieved()", 500);
+		return;
+		}
+		window.onload = WaitUntilCustomerGUIDIsRetrieved;
+		_elqQ.push(['elqGetCustomerGUID']);
+		//--></script>
+
+
+		
+		<style type="text/css">
+			.form label { width: 560px; float: left; clear: both; }
+			.form input[type=submit] { margin-left: 560px; }
+		</style>
+		</div>
 
 
   </body>
